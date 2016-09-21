@@ -20,7 +20,7 @@ public class Livros implements Serializable{
 	
 	public List<Livro> buscaLivrosPorNome(String livro){
 		return manager.createQuery("FROM Livro l "
-				+ " WHERE l.livro like = :livro "
+				+ " WHERE l.livro like :livro "
 				+ " ORDER BY l.livro ASC", Livro.class).setParameter("livro", livro).getResultList();
 	}	
 	
