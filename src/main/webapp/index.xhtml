@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<meta charset="UTF-8" />
+		<title>
+			<ui:insert name="titulo">Livros</ui:insert>
+		</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />		
+		
+		<h:outputStylesheet library="css" name="estilo.css" />		
+		<h:outputStylesheet library="css" name="bootstrap.css" />
+		<link rel="shortcut icon" href="resources/img/ico/favicon.ico" />
+	</h:head>
+	<h:body>
+	<p:growl id="growl" life="15000" autoUpdate="true"/>
+	<div id="ui-fluid">
+		<div id="cabecalho">
+			<ui:insert name="cabecalho">
+				<div id="menu">
+					<h:form>
+						<p:menubar style="padding: 0px;">
+							<p:menuitem value="Livros" outcome="/index" />
+							<p:menuitem value="Relatórios" disabled="true" title="Em desenvolvimento"/>														
+						</p:menubar>
+					</h:form>
+				</div>
+			</ui:insert>
+		</div>
+		<div id="wrap">
+			<ui:insert name="corpo">
+				<div class="container">
+				<h1>Livros</h1>
+					<h:form id="frm-novo">
+						<p:outputLabel value="Livro" for="livro"/>
+						<p:inputText id="livro" value="#{livroBean.livro.livro}" required="true" title=""/>
+						
+						<p:outputLabel value="Autor" for="autor"/>
+						<p:inputText id="autor" value="#{livroBean.livro.autor}" required="true" title=""/>
+						
+						<p:outputLabel value="Data de lançamento" for="data-lancamento"/>
+						<p:calendar id="data-lancamento" value="#{livroBean.livro.dataLancamento}" locale="pt" required="true"  pattern="dd-MM-yyyy" mask="true"/>
+						
+						<p:separator/>		
+						
+						<p:commandButton value="Salvar" action="#{livroBean.salvar}" title="Salvar dados" style="border-radius:2px;" process="frm-novo" update="frm-novo, frm-localizar:lista-de-livros" />
+						<p:commandButton value="Excluir" id="btn-excluir" onclick="PF('confirmacao').show()" title="Excluir dados" disabled="#{livroBean.btnExcluir}"/>
+						<p:commandButton value="Limpar" action="#{livroBean.limpar}" immediate="true" title="Limpar campos do formulário"/>
+						
+						<div class="legenda">* Campos obrigatórios.</div>
+						<p:separator/>											    					    																    						    																																																										    								    									    										 															
+					</h:form>
+				
+					
+					<h:form id="frm-localizar" styleClass="caixa">
+						<div class="coluna coluna-10">
+							<p:inputText title="Pesquisa pelo nome do livro." placeholder="Nome do Livro" value="#{livroBean.buscaLivro}" />
+						</div>	  					
+						<div class="coluna coluna-2">
+							<p:commandButton value="Pesquisar" action="#{livroBean.buscaTodosLivros()}" update="frm-localizar" />
+						</div>						
+						<p:panelGrid columns="1" layout="grid" styleClass="panelgrid-noborder" columnClasses="ui-grid-col-12">
+							<p:dataTable 
+								id="lista-de-livros"
+								value="#{livroBean.listLivros}" 
+								var="l"
+								emptyMessage="Nenhum livro encontrado."
+								rows="10"
+				 				paginator="true"
+				 				paginatorAlwaysVisible="false" 
+				 				paginatorPosition="bottom"
+				 				selection="#{livroBean.livro}"
+				 				rowKey="#{l.pkLivro}"
+				 				selectionMode="single"
+				 				>
+				 				<p:ajax 
+									event="rowDblselect"
+									listener="#{livroBean.aplicaObjeto}"
+									update="frm-novo"/>
+				 				<p:column headerText="Livro" style="width:40%">
+									<p:outputLabel value="#{l.livro}"/>
+								</p:column>
+								<p:column headerText="Autor" style="width:40%">
+									<p:outputLabel value="#{l.autor}"></p:outputLabel>
+								</p:column>											
+							</p:dataTable>
+						</p:panelGrid>
+					</h:form>
+					<p:confirmDialog widgetVar="confirmacao" closable="false" showEffect="fade" hideEffect="fade" severity="alert" message="Tem certeza que deseja excluir o registro?">
+						<h:form>
+							<p:commandButton value="SIM" onclick="confirmacao.hide()" action="#{livroBean.remover()}" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" update="frm-novo frm-localizar" resetValues="true" />
+							<p:commandButton value="NÃO" onclick="confirmacao.hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+						</h:form>
+					</p:confirmDialog>														
+ 			</div>
+			</ui:insert>
+			<ui:insert name="rodape">
+				<div id="rodape" align="center">
+				</div>
+			</ui:insert>
+		</div>
+	</div>
+	<script>
+		/* window.onload = function (){
+			document.getElementById("frm-novo:btn-excluir").style.display = "none";
+		} */
+	
+		PrimeFaces.locales['pt'] = {
+			closeText : 'Fechar',
+			prevText : 'Anterior',
+			nextText : 'Próximo',
+			currentText : 'Começo',
+			monthNames : [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
+					'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro',
+					'Dezembro' ],
+			monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul',
+					'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+			dayNames : [ 'Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta',
+					'Sexta', 'Sábado' ],
+			dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb' ],
+			dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S', 'S' ],
+			weekHeader : 'Semana',
+			firstDay : 0,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : '',
+			timeOnlyTitle : 'Só Horas',
+			timeText : 'Tempo',
+			hourText : 'Hora',
+			minuteText : 'Minuto',
+			secondText : 'Segundo',
+			ampm : false,
+			month : 'Mês',
+			week : 'Semana',
+			day : 'Dia',
+			allDayText : 'Todo o Dia'
+		};		
+	</script>
+	</h:body>
+</html>
