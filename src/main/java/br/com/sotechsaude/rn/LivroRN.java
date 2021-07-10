@@ -33,6 +33,7 @@ public class LivroRN implements Serializable{
 	public void excluir(Livro livro){
 		try {
 			daoLivro.excluir(livro);
+			System.out.println("livro: " + livro.getAutor() + livro.getLivro());
 			exibeSucesso("Removido com sucesso", null);
 		} catch (Exception e) {
 			exibeErro("Erro ao remover", null);

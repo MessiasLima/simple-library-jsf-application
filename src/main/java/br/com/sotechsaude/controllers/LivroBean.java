@@ -28,7 +28,8 @@ public class LivroBean implements Serializable{
 	
 	public LivroBean() {
 		setLivro(new Livro());	
-		setBtnExcluir(true);
+		setBtnExcluir(false);
+		//buscaTodosLivros();
 	}
 	
 	public void salvar(){
@@ -37,9 +38,9 @@ public class LivroBean implements Serializable{
 		setBtnExcluir(true);
 	}
 
-	public String remover(){
+	public void remover(){
 		rnLivro.excluir(getLivro());
-		return limpar();
+		//return limpar();
 	}
 	
 	public void aplicaObjeto(SelectEvent event){
@@ -52,7 +53,7 @@ public class LivroBean implements Serializable{
 	}
 	
 	public void buscaTodosLivros(){
-		if(getBuscaLivro().equals(" ")){
+		if(getBuscaLivro().equals("")){
 			setListLivros(rnLivro.buscaTodosLivros());
 		}
 		setListLivros(rnLivro.buscaLivrosPorNome(getBuscaLivro()));

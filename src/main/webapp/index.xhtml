@@ -43,13 +43,13 @@
 						<p:inputText id="autor" value="#{livroBean.livro.autor}" required="true" title=""/>
 						
 						<p:outputLabel value="Data de lançamento" for="data-lancamento"/>
-						<p:calendar id="data-lancamento" value="#{livroBean.livro.dataLancamento}" locale="pt" required="true"  pattern="dd-MM-yyyy" mask="true"/>
+						<p:calendar id="data-lancamento" value="#{livroBean.livro.dataLancamento}" locale="pt" required="true"  pattern="dd/MM/yyyy" mask="true"/>
 						
 						<p:separator/>		
 						
 						<p:commandButton value="Salvar" action="#{livroBean.salvar}" title="Salvar dados" style="border-radius:2px;" process="frm-novo" update="frm-novo, frm-localizar:lista-de-livros" />
-						<p:commandButton value="Excluir" id="btn-excluir" onclick="PF('confirmacao').show()" title="Excluir dados" disabled="#{livroBean.btnExcluir}"/>
-						<p:commandButton value="Limpar" action="#{livroBean.limpar}" immediate="true" title="Limpar campos do formulário"/>
+						<p:commandButton value="Excluir" action="#{livroBean.remover}" id="btn-excluir" onclick="PF('confirmacao').show()" title="Excluir dados" disabled="#{livroBean.btnExcluir}"/>
+						<p:commandButton value="Limpar" type="reset" immediate="true" title="Limpar campos do formulário"/>
 						
 						<div class="legenda">* Campos obrigatórios.</div>
 						<p:separator/>											    					    																    						    																																																										    								    									    										 															
@@ -61,7 +61,7 @@
 							<p:inputText title="Pesquisa pelo nome do livro." placeholder="Nome do Livro" value="#{livroBean.buscaLivro}" />
 						</div>	  					
 						<div class="coluna coluna-2">
-							<p:commandButton value="Pesquisar" action="#{livroBean.buscaTodosLivros()}" update="frm-localizar" />
+							<p:commandButton value="Pesquisar" action="#{livroBean.buscaTodosLivros}" update="frm-localizar" />
 						</div>						
 						<p:panelGrid columns="1" layout="grid" styleClass="panelgrid-noborder" columnClasses="ui-grid-col-12">
 							<p:dataTable 
